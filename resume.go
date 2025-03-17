@@ -39,14 +39,11 @@ func take_profit_from_cpp_and_golang() (profit float64) {
 }
 
 func employerOffersAwesomeTasks(lang string) bool {
-    return false;
     // Your implementation here
-    // return ?
 }
 
 func workHardWith(lang string) (profit float64) {
     // TODO
-    return 100000000;
 }
 
 func setGoroutinePriorityTo(value int) {
