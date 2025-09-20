@@ -1,51 +1,39 @@
 package main
 
-import "fmt"
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 func main() {
-    current_lang := "Perl"
-    var profit float64
+	langs := []string{"C++", "Golang"}
 
-    if employerOffersAwesomeTasks(current_lang) {
-        profit = workHardWith(current_lang);
-    } else {
-        profit = take_profit_from_cpp_and_golang();
-    }
+	var profit float64
+	var wg sync.WaitGroup
+	var mu sync.Mutex
 
-    fmt.Printf("Your profit will be: %.2f ₽\n", profit)
-}
+	for priority, lang := range langs {
+		wg.Add(1)
+		go func(lang string, priority int) {
+			defer wg.Done()
+			setGoroutinePriorityTo(priority)
+			partial_profit := workHardWith(lang)
+			mu.Lock()
+			defer mu.Unlock()
+			profit += partial_profit
+		}(lang, priority)
+	}
 
-func take_profit_from_cpp_and_golang() (profit float64) {
-    langs := []string{ "C++", "Golang" }
-    var wg sync.WaitGroup
-    var mu sync.Mutex
+	wg.Wait()
 
-    for priority, lang := range(langs) {
-        wg.Add(1);
-        go func(lang string, priority int) {
-            defer wg.Done()
-            setGoroutinePriorityTo(priority)
-            partial_profit := workHardWith(lang)
-            mu.Lock()
-            defer mu.Unlock()
-            profit += partial_profit
-        }(lang, priority);
-    }
-
-    wg.Wait();
-
-    return
-}
-
-func employerOffersAwesomeTasks(lang string) bool {
-    // Your implementation here
+	fmt.Printf("Your profit will be: %.2f ₽\n", profit)
 }
 
 func workHardWith(lang string) (profit float64) {
-    // TODO
+	// Implementation here
+	return 100000000
 }
 
 func setGoroutinePriorityTo(value int) {
-    // Incredible implementation here
+	// Incredible implementation here
 }
